@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "761511755098",
+    "project_id": "darkchoclate-awesomenotes",
+    "storage_bucket": "darkchoclate-awesomenotes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761511755098:android:cd4544db3769af02b88763",
+        "android_client_info": {
+          "package_name": "com.darkchoclate.awesome_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDihoRgO5FMJ3Ltr04ux1HpyhBlHE2JWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761511755098:android:73f6d3a7bf32dee6b88763",
+        "android_client_info": {
+          "package_name": "com.darkchoclate.awesomenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDihoRgO5FMJ3Ltr04ux1HpyhBlHE2JWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761511755098:android:c0b357525b4d61dfb88763",
+        "android_client_info": {
+          "package_name": "com.darkchoclate.dark_choclate_fees_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDihoRgO5FMJ3Ltr04ux1HpyhBlHE2JWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761511755098-5klq25lom7qvatfdq134a92qn587h221.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
