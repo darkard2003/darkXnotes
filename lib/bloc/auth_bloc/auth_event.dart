@@ -1,4 +1,5 @@
 import 'package:awesome_notes/models/user_data_model.dart';
+import 'package:awesome_notes/services/encryption/cypher.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/material.dart';
 

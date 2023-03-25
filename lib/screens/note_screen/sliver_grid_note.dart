@@ -74,7 +74,7 @@ class NoteTile extends StatelessWidget {
                 ? const EdgeInsets.all(15)
                 : const EdgeInsets.fromLTRB(15, 42, 15, 15),
             child: Text(
-              tNote.content,
+              tNote.ycontent,
               overflow: TextOverflow.ellipsis,
               maxLines: 7,
             ),

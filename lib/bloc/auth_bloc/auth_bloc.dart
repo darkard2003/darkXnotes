@@ -3,6 +3,7 @@ import 'package:awesome_notes/bloc/auth_bloc/auth_state.dart';
 import 'package:awesome_notes/services/auth/auth_exp.dart';
 import 'package:awesome_notes/services/auth/firebase_auth_provider.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
+import 'package:awesome_notes/services/encryption/cypher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_event.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_state.dart';
@@ -19,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (user == null) {
           emit(const AuthStateNeedLogin(isLoading: false));
         } else {
+          await Cypher().init();
           emit(AuthStateLoggedIn(isLoading: false, user: user));
         }
       },
@@ -38,6 +40,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
           if (user.isVerified) {
             emit(AuthStateLoggedIn(isLoading: false, user: user));
+            Cypher.storePassword(password);
+            Cypher().init();
           } else {
             emit(AuthStateNeedVerification(isLoading: false, user: user));
           }
@@ -63,7 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             final user = await provider.registerWithEmail(
                 email: email, password: password);
             user.name = name;
-
+            Cypher.storePassword(password);
             user.sendEmailVerification();
 
             await CloudDatabase.currentUser().addUserData(user);
@@ -114,6 +118,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await user.reload();
         if (user.isVerified) {
           await CloudDatabase.currentUser().updateUserData(user);
+          Cypher().init();
           emit(AuthStateLoggedIn(isLoading: false, user: user));
         } else {
           emit(AuthStateNeedVerification(isLoading: false, user: user));
