@@ -39,9 +39,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               await provider.loginWithEmail(email: email, password: password);
 
           if (user.isVerified) {
-            emit(AuthStateLoggedIn(isLoading: false, user: user));
             Cypher.storePassword(password);
-            Cypher().init();
+            await Cypher().init();
+            emit(AuthStateLoggedIn(isLoading: false, user: user));
           } else {
             emit(AuthStateNeedVerification(isLoading: false, user: user));
           }
@@ -118,7 +118,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await user.reload();
         if (user.isVerified) {
           await CloudDatabase.currentUser().updateUserData(user);
-          Cypher().init();
+          await Cypher().init();
           emit(AuthStateLoggedIn(isLoading: false, user: user));
         } else {
           emit(AuthStateNeedVerification(isLoading: false, user: user));

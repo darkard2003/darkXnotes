@@ -33,7 +33,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
       _note ??= ModalRoute.of(context)!.settings.arguments as TextNote;
       _hidden = _note!.isHidden;
       titleController.text = _note!.title;
-      contentController.text = _note!.ycontent;
+      contentController.text = _note!.content;
       _note = await cloud.createOrUpdateNote(_note!) as TextNote;
     } catch (e) {
       showAlartDialog(title: 'Error', content: e.toString(), context: context);
@@ -70,7 +70,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         return;
       }
       await Share.share(
-        _note!.ycontent,
+        _note!.content,
         subject: _note!.title,
       );
     } catch (e) {
@@ -162,7 +162,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                 maxLines: null,
                 onChanged: (text) async {
                   try {
-                    _note!.ycontent = text;
+                    _note!.content = text;
                     _note = await cloud.createOrUpdateNote(_note!) as TextNote;
                   } catch (e) {
                     showAlartDialog(

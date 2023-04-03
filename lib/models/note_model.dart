@@ -1,3 +1,4 @@
+import 'package:awesome_notes/services/encryption/cypher.dart';
 import 'todo_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'text_note_model.dart';
@@ -19,6 +20,7 @@ abstract class Note {
   DateTime createdAt;
   DateTime updatedAt;
   bool isHidden;
+  var _cypher = Cypher();
 
   Note({
     required this.id,

@@ -4,7 +4,7 @@ import '../services/cloud_database/database_constant.dart' as db_constant;
 import 'package:awesome_notes/services/encryption/cypher.dart';
 
 class TextNote extends Note {
-  String content;
+  String _content;
 
   final cypher = Cypher();
 
@@ -12,11 +12,12 @@ class TextNote extends Note {
     required String id,
     required Type type,
     required String title,
-    required this.content,
+    required String content,
     required DateTime createdAt,
     required DateTime updatedAt,
     required bool isHidden,
-  }) : super(
+  })  : _content = content.isNotEmpty ? Cypher().encrypt(content) : "",
+        super(
           id: id,
           type: type,
           title: title,
@@ -25,13 +26,12 @@ class TextNote extends Note {
           isHidden: isHidden,
         );
 
-
-  set ycontent(String source) {
-    content = source.isNotEmpty ? cypher.encrypt(source) : "";
+  set content(String source) {
+    _content = source.isNotEmpty ? cypher.encrypt(source) : "";
   }
 
-  String get ycontent {
-    return content.isNotEmpty ? cypher.decrypt(content) : "";
+  String get content {
+    return _content.isNotEmpty ? cypher.decrypt(_content) : "";
   }
 
   factory TextNote.fromFirebase(DocumentSnapshot doc) {

@@ -79,7 +79,7 @@ Future<SettingActions?> showSettingDialog(
                 },
                 child: Text(
                   'Delete All',
-                  style: TextStyle(color: Theme.of(context).errorColor),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
             ],
