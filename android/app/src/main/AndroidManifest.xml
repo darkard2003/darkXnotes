@@ -2,7 +2,7 @@
     package="com.darkchoclate.awesome_notes">
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
    <application
-        android:label="awesome_notes"
+        android:label="darkXnotes"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
