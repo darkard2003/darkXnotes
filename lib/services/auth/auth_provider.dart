@@ -1,5 +1,5 @@
 import 'package:awesome_notes/models/user_data_model.dart';
-abstract class AuthProvider {
+abstract class AppAuthProvider {
   Future<UserData?> get user;
 
   Future<UserData> loginWithEmail({

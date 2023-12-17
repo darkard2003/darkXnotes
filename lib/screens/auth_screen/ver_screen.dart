@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   final UserData user;
-  const VerifyEmailScreen({Key? key, required this.user}) : super(key: key);
+  const VerifyEmailScreen({super.key, required this.user});
 
   @override
   State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();

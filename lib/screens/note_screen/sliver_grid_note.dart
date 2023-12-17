@@ -10,11 +10,10 @@ class SliverNoteGrid extends StatelessWidget {
   final OnDismiss onDismiss;
 
   const SliverNoteGrid(
-      {Key? key,
+      {super.key,
       required this.notes,
       required this.onPress,
-      required this.onDismiss})
-      : super(key: key);
+      required this.onDismiss});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +46,7 @@ class SliverNoteGrid extends StatelessWidget {
 class NoteTile extends StatelessWidget {
   final Note note;
   final OnPress onPress;
-  const NoteTile({Key? key, required this.note, required this.onPress})
-      : super(key: key);
+  const NoteTile({super.key, required this.note, required this.onPress});
 
   @override
   Widget build(BuildContext context) {

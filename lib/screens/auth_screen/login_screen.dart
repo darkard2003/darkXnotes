@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -45,101 +45,94 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-          centerTitle: true,
-        ),
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  height: 30,
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 150,
+              ),
+              const Text(
+                'Login to continue...',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
-                const Text(
-                  'Login to continue...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        validator: (value) =>
-                            value!.isEmpty ? 'Enter a email' : null,
-                        controller: _email,
-                        decoration: const InputDecoration(
-                            hintText: 'email@address.com',
-                            label: Text('Email'),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                              color: Color.fromARGB(255, 169, 126, 242),
-                            ))),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        obscureText: !_showPassword,
-                        validator: (value) =>
-                            value!.length < 6 ? 'Password is short' : null,
-                        controller: _password,
-                        decoration: InputDecoration(
-                          hintText: 'password',
-                          label: const Text('Password'),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(255, 169, 126, 242),
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () => setState(() {
-                              _showPassword = !_showPassword;
-                            }),
-                            icon: Icon(_showPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: (value) =>
+                          value!.isEmpty ? 'Enter a email' : null,
+                      controller: _email,
+                      decoration: const InputDecoration(
+                          hintText: 'email@address.com',
+                          label: Text('Email'),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Color.fromARGB(255, 169, 126, 242),
+                          ))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      obscureText: !_showPassword,
+                      validator: (value) =>
+                          value!.length < 6 ? 'Password is short' : null,
+                      controller: _password,
+                      decoration: InputDecoration(
+                        hintText: 'password',
+                        label: const Text('Password'),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 169, 126, 242),
                           ),
                         ),
+                        suffixIcon: IconButton(
+                          onPressed: () => setState(() {
+                            _showPassword = !_showPassword;
+                          }),
+                          icon: Icon(_showPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      final email = _email.text;
-                      final password = _password.text;
-                      context.read<AuthBloc>().add(
-                          AuthEventLogin(email: email, password: password));
-                    }
-                  },
-                  child: const Text('Login'),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(const AuthEventShowRegister());
-                  },
-                  child: const Text('Dont have an account? Register here...'),
-                )
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final email = _email.text;
+                    final password = _password.text;
+                    context
+                        .read<AuthBloc>()
+                        .add(AuthEventLogin(email: email, password: password));
+                  }
+                },
+                child: const Text('Login'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEventShowRegister());
+                },
+                child: const Text('Dont have an account? Register here...'),
+              )
+            ],
           ),
         ),
       ),

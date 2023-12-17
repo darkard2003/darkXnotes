@@ -6,21 +6,14 @@ class TextNote extends Note {
   String content;
 
   TextNote({
-    required String id,
-    required Type type,
-    required String title,
+    required super.id,
+    required super.type,
+    required super.title,
     required this.content,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required bool isHidden,
-  }) : super(
-          id: id,
-          type: type,
-          title: title,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          isHidden: isHidden,
-        );
+    required super.createdAt,
+    required super.updatedAt,
+    required super.isHidden,
+  });
 
   factory TextNote.fromFirebase(DocumentSnapshot doc) {
     return TextNote(

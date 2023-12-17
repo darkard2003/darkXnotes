@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
 
-class FirebaseAuthProvider implements AuthProvider {
+class FirebaseAuthProvider implements AppAuthProvider {
   // Making it singleton
   FirebaseAuthProvider._getInstance();
   static final _shared = FirebaseAuthProvider._getInstance();

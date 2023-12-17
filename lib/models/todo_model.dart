@@ -53,22 +53,15 @@ class ToDo extends Note {
   List<ToDoItem> completedToDoItems;
 
   ToDo({
-    required String id,
-    required Type type,
-    required String title,
+    required super.id,
+    required super.type,
+    required super.title,
     required this.toDoItems,
     required this.completedToDoItems,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required bool isHidden,
-  }) : super(
-          id: id,
-          type: type,
-          title: title,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          isHidden: isHidden,
-        );
+    required super.createdAt,
+    required super.updatedAt,
+    required super.isHidden,
+  });
 
   factory ToDo.newToDo({required bool isHidden}) {
     return ToDo(
