@@ -23,7 +23,7 @@ The objective of this project are :
 
 ## Screenshots
 
-![Home Screenshot](/screenshots/android/home.png){ width=200 } ![Note Screen](/screenshots/android/note.png){ width=200 }
+<img src="/screenshots/android/home.png" alt="Home Screenshot" width="200"/><img src="/screenshots/android/note.png" alt="Note Screen" width="200"/>
 
 ## Try it out
 
