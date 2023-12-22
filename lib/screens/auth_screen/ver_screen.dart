@@ -17,47 +17,54 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       appBar: AppBar(
         title: const Text('Verify Email'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            const Text(
-              'Check your mailbox and verify your email...',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 500,
+          ),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 40,
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(AuthEventVerifyEmail(user: widget.user));
-                },
-                child: const Text('Done')),
-            TextButton(
-                onPressed: () {
-                  context
-                      .read<AuthBloc>()
-                      .add(AuthEventSendVerificationEmail(user: widget.user));
-                },
-                child: const Text('Resend email...')),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(const AuthEventShowLogin());
-                },
-                child: const Text('Not your email? Back to login...'))
-          ],
+              const Text(
+                'Check your mailbox and verify your email...',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<AuthBloc>()
+                        .add(AuthEventVerifyEmail(user: widget.user));
+                  },
+                  child: const Text('Done')),
+              TextButton(
+                  onPressed: () {
+                    context
+                        .read<AuthBloc>()
+                        .add(AuthEventSendVerificationEmail(user: widget.user));
+                  },
+                  child: const Text('Resend email...')),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(const AuthEventShowLogin());
+                  },
+                  child: const Text('Not your email? Back to login...'))
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 {
-    "name": "awesome_notes",
-    "short_name": "awesome_notes",
+    "name": "darkXnotes",
+    "short_name": "Xnotes",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

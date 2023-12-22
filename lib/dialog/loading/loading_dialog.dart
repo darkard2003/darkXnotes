@@ -36,49 +36,48 @@ class LoadingDialog {
 
     final overlay = OverlayEntry(
       builder: (context) {
+        var width = MediaQuery.of(context).size.width;
+
         return Material(
           color: Colors.black.withOpacity(0.5),
           child: Center(
             child: Container(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.8,
-                maxWidth: MediaQuery.of(context).size.width * 0.8,
-                minWidth: MediaQuery.of(context).size.width * 0.8,
+                maxWidth: width > 500 ? 500 : width * 0.8,
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).dialogBackgroundColor,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const CircularProgressIndicator(),
-                      const SizedBox(height: 40),
-                      StreamBuilder<String>(
-                          stream: textController.stream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!,
-                                textAlign: TextAlign.center,
-                              );
-                            } else {
-                              return const Text('');
-                            }
-                          }),
-                      const SizedBox(
-                        height: 20,
-                      )
-                    ],
-                  ),
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 40),
+                    StreamBuilder<String>(
+                        stream: textController.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              snapshot.data!,
+                              textAlign: TextAlign.center,
+                            );
+                          } else {
+                            return const Text('');
+                          }
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
               ),
             ),

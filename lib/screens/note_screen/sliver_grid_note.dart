@@ -33,11 +33,9 @@ class SliverNoteGrid extends StatelessWidget {
         ),
         childCount: notes.length,
       ),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.85,
-        mainAxisSpacing: 1,
-        crossAxisSpacing: 1,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        childAspectRatio: 1 / 1.2,
       ),
     );
   }

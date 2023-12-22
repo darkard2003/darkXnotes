@@ -6,11 +6,17 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Loading'),
-      ),
-      body: const Center(
-        child: CircularProgressIndicator(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const LinearProgressIndicator(),
+            Expanded(
+              child: Center(
+                child: Image.asset("assets/images/logo.png",width: 100)
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

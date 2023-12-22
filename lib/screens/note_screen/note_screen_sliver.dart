@@ -175,10 +175,8 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
                     );
                   }
                   if (!snapshot.hasData) {
-                    return const SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    return const SliverToBoxAdapter(
+                      child: LinearProgressIndicator(),
                     );
                   }
                   final notes = snapshot.data as List<Note>;
