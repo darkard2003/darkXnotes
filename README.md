@@ -29,3 +29,4 @@ The objective of this project are :
 
 check out the web version [here](https://darkchoclate-awesomenotes.web.app/)
 
+or download the android apk from [here](https://github.com/darkard2003/awesome_note_private/releases/)
