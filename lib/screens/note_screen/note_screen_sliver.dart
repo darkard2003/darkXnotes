@@ -1,3 +1,4 @@
+
 import 'package:awesome_notes/bloc/auth_bloc/auth_bloc.dart';
 import 'package:awesome_notes/dialog/alart_dialog.dart';
 import 'package:awesome_notes/dialog/conformation_dialog.dart';
@@ -6,6 +7,7 @@ import 'package:awesome_notes/screens/note_screen/sliver_grid_note.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
 import 'package:awesome_notes/models/user_data_model.dart';
 import 'package:awesome_notes/models/note_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth/local_auth.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -114,9 +116,11 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
 
   @override
   void initState() {
-    _setupQuickActions();
-    cloud = CloudDatabase.currentUser();
     super.initState();
+    if (!kIsWeb) {
+      _setupQuickActions();
+    }
+    cloud = CloudDatabase.currentUser();
   }
 
   @override
