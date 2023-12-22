@@ -20,3 +20,12 @@ The objective of this project are :
 - Delete notes
 - Hide notes
 - Multiplatform (Android, Web) (iOS not tested)
+
+## Screenshots
+
+![Home Screenshot](/screenshots/android/home.png){ width=200 } ![Note Screen](/screenshots/android/note.png){ width=200 }
+
+## Try it out
+
+check out the web version [here](https://darkchoclate-awesomenotes.web.app/)
+
