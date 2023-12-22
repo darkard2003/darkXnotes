@@ -34,6 +34,40 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         fontStyle: FontStyle.italic,
       ),
     );
+
+    titleController.addListener(() async {
+      var text = titleController.text;
+      if (text.length >= 1000) {
+        titleController.text = titleController.text.substring(0, 1000);
+        return;
+      }
+
+      try {
+        _note!.title = text;
+        _note = await cloud.createOrUpdateNote(_note!) as TextNote;
+      } catch (e) {
+        if (!context.mounted) return;
+        showAlartDialog(
+            title: 'Error', content: e.toString(), context: context);
+      }
+    });
+
+    contentController.addListener(() async {
+      var text = contentController.text;
+      if (text.length >= 5000) {
+        contentController.text = contentController.text.substring(0, 5000);
+        return;
+      }
+
+      try {
+        _note!.content = text;
+        _note = await cloud.createOrUpdateNote(_note!) as TextNote;
+      } catch (e) {
+        if (!context.mounted) return;
+        showAlartDialog(
+            title: 'Error', content: e.toString(), context: context);
+      }
+    });
   }
 
   Future<void> _initNote() async {
@@ -149,16 +183,6 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
               ),
               controller: titleController,
               maxLines: null,
-              onChanged: (text) async {
-                try {
-                  _note!.title = text;
-                  _note = await cloud.createOrUpdateNote(_note!) as TextNote;
-                } catch (e) {
-                  if (!context.mounted) return;
-                  showAlartDialog(
-                      title: 'Error', content: e.toString(), context: context);
-                }
-              },
             ),
             const SizedBox(height: 8),
             Expanded(
@@ -171,18 +195,6 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                 ),
                 controller: contentController,
                 maxLines: null,
-                onChanged: (text) async {
-                  try {
-                    _note!.content = text;
-                    _note = await cloud.createOrUpdateNote(_note!) as TextNote;
-                  } catch (e) {
-                    if (!context.mounted) return;
-                    showAlartDialog(
-                        title: 'Error',
-                        content: e.toString(),
-                        context: context);
-                  }
-                },
               ),
             ),
           ],
