@@ -14,6 +14,7 @@ import 'package:avatars/avatars.dart';
 
 class NotesScreenSliver extends StatefulWidget {
   final UserData user;
+
   const NotesScreenSliver({super.key, required this.user});
 
   @override
@@ -149,7 +150,7 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
                       if (!mounted) return;
                       _doSettingAction(action);
                     } on Exception catch (e) {
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       showAlartDialog(
                           title: 'Error',
                           content: e.toString(),
@@ -217,7 +218,7 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
               });
             }
           } else {
-            if (!mounted) return;
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Authentication not supported'),
