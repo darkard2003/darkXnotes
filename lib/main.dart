@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) => MaterialApp(
-        title: 'Awesome Notes',
+        title: 'darkXnotes',
         theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.light,
