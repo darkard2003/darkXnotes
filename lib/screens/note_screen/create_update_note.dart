@@ -46,7 +46,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         _note!.title = text;
         _note = await cloud.createOrUpdateNote(_note!) as TextNote;
       } catch (e) {
-        if (!context.mounted) return;
+        if (!mounted) return;
         showAlartDialog(
             title: 'Error', content: e.toString(), context: context);
       }
@@ -63,7 +63,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         _note!.content = text;
         _note = await cloud.createOrUpdateNote(_note!) as TextNote;
       } catch (e) {
-        if (!context.mounted) return;
+        if (mounted) return;
         showAlartDialog(
             title: 'Error', content: e.toString(), context: context);
       }
@@ -78,7 +78,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
       contentController.text = _note!.content;
       _note = await cloud.createOrUpdateNote(_note!) as TextNote;
     } catch (e) {
-      if (!context.mounted) return;
+      if (mounted) return;
       showAlartDialog(title: 'Error', content: e.toString(), context: context);
     }
   }

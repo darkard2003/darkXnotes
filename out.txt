@@ -1,0 +1,8 @@
+
+┌─ New feature ────────────────────────────────────────────────────────────────────────────┐
+│   WebAssembly compilation is new. Understand the details before deploying to production. │
+│   See https://flutter.dev/wasm for more information.                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
+
+Compiling lib\main.dart for the Web...                          
+Compiling lib\main.dart for the Web...                             20.1s

@@ -1,4 +1,3 @@
-
 import 'package:awesome_notes/bloc/auth_bloc/auth_bloc.dart';
 import 'package:awesome_notes/dialog/alart_dialog.dart';
 import 'package:awesome_notes/dialog/conformation_dialog.dart';
@@ -150,6 +149,7 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
                       if (!mounted) return;
                       _doSettingAction(action);
                     } on Exception catch (e) {
+                      if (!mounted) return;
                       showAlartDialog(
                           title: 'Error',
                           content: e.toString(),
@@ -217,6 +217,7 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
               });
             }
           } else {
+            if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Authentication not supported'),

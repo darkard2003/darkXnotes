@@ -26,22 +26,22 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           brightness: Brightness.light,
           colorScheme: lightDynamic,
-          scaffoldBackgroundColor: lightDynamic?.background ?? Colors.white,
+          scaffoldBackgroundColor: lightDynamic?.surface ?? Colors.white,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: lightDynamic?.primary ?? Colors.blue,
           ),
-          dialogBackgroundColor: lightDynamic?.background ?? Colors.white,
+          dialogBackgroundColor: lightDynamic?.surface ?? Colors.white,
         ),
         darkTheme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.dark,
           colorScheme: darkDynamic,
-          scaffoldBackgroundColor: darkDynamic?.background ?? Colors.grey[900],
+          scaffoldBackgroundColor: darkDynamic?.surface ?? Colors.grey[900],
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: darkDynamic?.primary ?? Colors.grey[800],
             foregroundColor: darkDynamic?.onPrimary ?? Colors.white,
           ),
-          dialogBackgroundColor: darkDynamic?.background ?? Colors.grey[900],
+          dialogBackgroundColor: darkDynamic?.surface ?? Colors.grey[900],
           snackBarTheme: SnackBarThemeData(
             backgroundColor: darkDynamic?.primaryContainer ?? Colors.grey[900],
             contentTextStyle: TextStyle(
