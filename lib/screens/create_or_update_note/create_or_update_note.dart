@@ -15,7 +15,7 @@ class CreateOrUpdateNote extends StatelessWidget {
     var note = args['note'] as Note;
     var uid = args['uid'] as String;
     var db = args['db'] as CloudDatabase;
-    var isUpdate = args['isUpdate'] as bool;
+    var isUpdate = args['update'] as bool;
 
     return BlocProvider(
       create: (context) => CreateUpdateNoteVM(

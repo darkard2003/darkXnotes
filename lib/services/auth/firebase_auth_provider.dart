@@ -11,7 +11,7 @@ class FirebaseAuthProvider implements AppAuthProvider {
 
   factory FirebaseAuthProvider() => _shared;
 
-  final _auth = FirebaseAuth.instance;
+  get _auth => FirebaseAuth.instance;
 
   // Login
   @override

@@ -57,6 +57,8 @@ class CreateUpdateNoteVM extends Cubit<EditNoteState> {
       }
       updateNote();
     });
+
+    init();
   }
 
   void init() async {
