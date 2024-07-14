@@ -1,9 +1,11 @@
 import 'package:awesome_notes/models/note_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 import '../services/cloud_database/database_constant.dart' as db_constant;
 
-class TextNote extends Note {
-  String content;
+class TextNote extends Note with EquatableMixin {
+  final String content;
 
   TextNote({
     required super.id,
@@ -14,18 +16,6 @@ class TextNote extends Note {
     required super.updatedAt,
     required super.isHidden,
   });
-
-  factory TextNote.fromFirebase(DocumentSnapshot doc) {
-    return TextNote(
-      id: doc.id,
-      type: Type.values[doc[db_constant.type] as int],
-      title: doc[db_constant.title] as String,
-      content: doc[db_constant.content] as String,
-      createdAt: (doc[db_constant.createdAt] as Timestamp).toDate(),
-      updatedAt: (doc[db_constant.updatedAt] as Timestamp).toDate(),
-      isHidden: doc[db_constant.isHidden] as bool,
-    );
-  }
 
   @override
   Map<String, dynamic> toMap() {
@@ -40,8 +30,9 @@ class TextNote extends Note {
   }
 
   factory TextNote.newNote({bool isHidden = false}) {
+    final id = const Uuid().v4();
     return TextNote(
-      id: '',
+      id: id,
       type: Type.text,
       title: '',
       content: '',
@@ -50,4 +41,44 @@ class TextNote extends Note {
       isHidden: isHidden,
     );
   }
+
+  @override
+  String get noteContent => content;
+
+  factory TextNote.fromMap(Map<String, dynamic> map, String id) {
+    return TextNote(
+      id: id,
+      type: Type.text,
+      title: map[db_constant.title] as String,
+      content: map[db_constant.content] as String,
+      createdAt: (map[db_constant.createdAt] as Timestamp).toDate(),
+      updatedAt: (map[db_constant.updatedAt] as Timestamp).toDate(),
+      isHidden: map[db_constant.isHidden] as bool,
+    );
+  }
+
+  @override
+  Note copyWith({
+    String? id,
+    Type? type,
+    String? title,
+    String? content,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isHidden,
+  }) {
+    return TextNote(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isHidden: isHidden ?? this.isHidden,
+    );
+  }
+
+  @override
+  List<Object?> get props =>
+      [id, type, title, content, createdAt, updatedAt, isHidden];
 }

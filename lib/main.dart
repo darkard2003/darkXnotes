@@ -1,11 +1,11 @@
 import 'package:awesome_notes/bloc/auth_bloc/auth_bloc.dart';
 import 'package:awesome_notes/dialog/loading/loading_dialog.dart';
 import 'package:awesome_notes/screens/auth_screen/ver_screen.dart';
-import 'package:awesome_notes/screens/note_screen/create_update_note.dart';
+import 'package:awesome_notes/screens/create_or_update_note/create_or_update_note.dart';
 import 'package:awesome_notes/screens/auth_screen/loading_screen.dart';
 import 'package:awesome_notes/screens/auth_screen/login_screen.dart';
 import 'package:awesome_notes/screens/auth_screen/register_screen.dart';
-import 'package:awesome_notes/screens/note_screen/note_screen_sliver.dart';
+import 'package:awesome_notes/screens/note_screen/note_screen.dart';
 import 'package:awesome_notes/services/auth/firebase_auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           child: const Home(),
         ),
         routes: {
-          '/update': (context) => const CreateUpdateNote(),
+          '/update': (context) => const CreateOrUpdateNote(),
         },
       ),
     );
@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
 
 class Home extends StatefulWidget {
   const Home({super.key});
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -87,7 +88,7 @@ class _HomeState extends State<Home> {
           return const RegisterScreen();
         } else if (state is AuthStateLoggedIn) {
           final user = state.user;
-          return NotesScreenSliver(user: user);
+          return NotesScreen(user: user);
         } else if (state is AuthStateUninitialized) {
           context.read<AuthBloc>().add(const AuthEventInitialize());
           return const LoadingScreen();

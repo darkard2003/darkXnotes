@@ -1,8 +1,5 @@
-import 'todo_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'text_note_model.dart';
-import 'package:awesome_notes/services/cloud_database/database_constant.dart'
-    as db_constant;
+import 'package:awesome_notes/models/text_note_model.dart';
+import 'package:awesome_notes/models/todo_model.dart';
 
 export 'text_note_model.dart';
 export 'todo_model.dart';
@@ -13,12 +10,12 @@ enum Type {
 }
 
 abstract class Note {
-  String id;
-  Type type;
-  String title;
-  DateTime createdAt;
-  DateTime updatedAt;
-  bool isHidden;
+  final String id;
+  final Type type;
+  final String title;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final bool isHidden;
 
   Note({
     required this.id,
@@ -31,16 +28,7 @@ abstract class Note {
 
   Map<String, dynamic> toMap();
 
-  factory Note.fromFirebase(DocumentSnapshot doc) {
-    final typeIndex = doc[db_constant.type] as int;
-    final noteType = Type.values[typeIndex];
-
-    if (noteType == Type.text) {
-      return TextNote.fromFirebase(doc);
-    } else {
-      return ToDo.fromFirebase(doc);
-    }
-  }
+  String get noteContent;
 
   factory Note.newNote({required Type type, required bool isHidden}) {
     if (type == Type.text) {
@@ -49,4 +37,22 @@ abstract class Note {
       return ToDo.newToDo(isHidden: isHidden);
     }
   }
+
+  factory Note.fromMap(Map<String, dynamic> map, String id) {
+    final type = Type.values[map['type'] as int];
+    if (type == Type.text) {
+      return TextNote.fromMap(map, id);
+    } else {
+      return ToDo.fromMap(map, id);
+    }
+  }
+
+  Note copyWith({
+    String? id,
+    Type? type,
+    String? title,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isHidden,
+  });
 }

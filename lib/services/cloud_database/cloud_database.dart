@@ -2,16 +2,17 @@ import 'package:awesome_notes/models/note_model.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_exp.dart';
 import 'package:awesome_notes/models/user_data_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 import 'database_constant.dart' as db_constant;
 
 class CloudDatabase {
-  final String userId;
-  CloudDatabase({required this.userId});
+  factory CloudDatabase() => _shared;
+
+  CloudDatabase._getInstance();
+
+  static final _shared = CloudDatabase._getInstance();
 
   // Note service
-  Stream<List<Note>> getNotes({bool hidden = false}) {
+  Stream<List<Note>> getNotes(String userId, {bool hidden = false}) {
     return FirebaseFirestore.instance
         .collection(db_constant.user)
         .doc(userId)
@@ -22,16 +23,14 @@ class CloudDatabase {
         .map(
           (snapshot) => snapshot.docs
               .map(
-                (doc) => Note.fromFirebase(doc),
+                (doc) => Note.fromMap(doc.data(), doc.id),
               )
               .toList(),
         );
   }
 
-  Future<Note> _addNote(Note note) async {
+  Future<Note> createNote(Note note, String userId) async {
     try {
-      final uuid = const Uuid().v1();
-      note.id = uuid;
       await FirebaseFirestore.instance
           .collection(db_constant.user)
           .doc(userId)
@@ -44,7 +43,7 @@ class CloudDatabase {
     }
   }
 
-  Future<void> _updateNote(Note note) async {
+  Future<void> updateNote(Note note, String userId) async {
     try {
       await FirebaseFirestore.instance
           .collection(db_constant.user)
@@ -57,20 +56,7 @@ class CloudDatabase {
     }
   }
 
-  Future<Note> createOrUpdateNote(Note note) async {
-    try {
-      if (note.id.isEmpty) {
-        note = await _addNote(note);
-      } else {
-        await _updateNote(note);
-      }
-      return note;
-    } on Exception catch (e) {
-      throw CloudExp(e.toString());
-    }
-  }
-
-  Future<void> deleteNote(Note note) async {
+  Future<void> deleteNote(Note note, String userId) async {
     try {
       await FirebaseFirestore.instance
           .collection(db_constant.user)
@@ -83,7 +69,7 @@ class CloudDatabase {
     }
   }
 
-  Future<void> deleteAllNotes({bool hidden = false}) async {
+  Future<void> deleteAllNotes(String userId, {bool hidden = false}) async {
     try {
       await FirebaseFirestore.instance
           .collection(db_constant.user)
@@ -106,7 +92,7 @@ class CloudDatabase {
     try {
       await FirebaseFirestore.instance
           .collection(db_constant.user)
-          .doc(userId)
+          .doc(user.id)
           .set(user.toMap());
     } on Exception catch (e) {
       throw CloudExp(e.toString());
@@ -116,46 +102,22 @@ class CloudDatabase {
   Future<void> updateUserData(UserData user) async {
     await FirebaseFirestore.instance
         .collection(db_constant.user)
-        .doc(userId)
+        .doc(user.id)
         .update(user.toMap());
   }
 
-  Future<void> updateName(String name) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection(db_constant.user)
-          .doc(userId)
-          .update({db_constant.name: name});
-    } on Exception catch (e) {
-      throw CloudExp(e.toString());
-    }
-  }
-
-  Future<void> updateProfilePic(String profilePic) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection(db_constant.user)
-          .doc(userId)
-          .update({'profilePicUrl': profilePic});
-    } on Exception catch (e) {
-      throw CloudExp(e.toString());
-    }
-  }
-
-  Future<UserData> getUserData() async {
+  Future<UserData?> getUserData(String userId) async {
     try {
       final doc = await FirebaseFirestore.instance
           .collection(db_constant.user)
           .doc(userId)
           .get();
-      return UserData.fromSnapshot(doc);
+
+      if (!doc.exists) return null;
+
+      return UserData.fromMap(doc.data()!);
     } on Exception catch (e) {
       throw CloudExp(e.toString());
     }
-  }
-
-  factory CloudDatabase.currentUser() {
-    final id = FirebaseAuth.instance.currentUser!.uid;
-    return CloudDatabase(userId: id);
   }
 }

@@ -46,6 +46,11 @@ class ToDoItem {
       updatedAt: map[db_constant.updatedAt] as DateTime,
     );
   }
+
+  @override
+  String toString() {
+    return "[${completed ? 'X' : ' '}] $title";
+  }
 }
 
 class ToDo extends Note {
@@ -91,20 +96,48 @@ class ToDo extends Note {
     };
   }
 
-  factory ToDo.fromFirebase(DocumentSnapshot doc) {
+  factory ToDo.fromMap(Map<String, dynamic> map, String id) {
     return ToDo(
-      id: doc.id,
-      type: Type.values[doc[db_constant.type] as int],
-      title: doc[db_constant.title] as String,
-      toDoItems: (doc[db_constant.toDoItems] as List<dynamic>)
+      id: id,
+      type: Type.values[map[db_constant.type] as int],
+      title: map[db_constant.title] as String,
+      toDoItems: (map[db_constant.toDoItems] as List<Object>)
           .map((item) => ToDoItem.fromMap(item as Map<String, Object>))
           .toList(),
-      completedToDoItems: (doc[db_constant.complitedToDoItems] as List<dynamic>)
+      completedToDoItems: (map[db_constant.complitedToDoItems] as List<Object>)
           .map((item) => ToDoItem.fromMap(item as Map<String, Object>))
           .toList(),
-      createdAt: doc[db_constant.createdAt] as DateTime,
-      updatedAt: doc[db_constant.updatedAt] as DateTime,
-      isHidden: doc[db_constant.isHidden] as bool,
+      createdAt: (map[db_constant.createdAt] as Timestamp).toDate(),
+      updatedAt: (map[db_constant.updatedAt] as Timestamp).toDate(),
+      isHidden: map[db_constant.isHidden] as bool,
+    );
+  }
+
+  @override
+  String get noteContent {
+    return toDoItems.map((item) => item.toString()).join('\n');
+  }
+
+  @override
+  ToDo copyWith({
+    String? id,
+    Type? type,
+    String? title,
+    List<ToDoItem>? toDoItems,
+    List<ToDoItem>? completedToDoItems,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isHidden,
+  }) {
+    return ToDo(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      toDoItems: toDoItems ?? this.toDoItems,
+      completedToDoItems: completedToDoItems ?? this.completedToDoItems,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isHidden: isHidden ?? this.isHidden,
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:awesome_notes/models/note_model.dart';
+import 'package:awesome_notes/screens/note_screen/note_state.dart';
 import 'package:flutter/material.dart';
 
 typedef OnPress = void Function(Note note);
 typedef OnDismiss = void Function(int index);
 
 class SliverNoteGrid extends StatelessWidget {
-  final List<Note> notes;
+  final List<NoteState> notes;
   final OnPress onPress;
   final OnDismiss onDismiss;
 
@@ -20,13 +21,13 @@ class SliverNoteGrid extends StatelessWidget {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) => Dismissible(
-          key: Key(notes[index].id),
+          key: Key(notes[index].note.id),
           onDismissed: (direction) {
             onDismiss(index);
           },
           child: Card(
             child: NoteTile(
-              note: notes[index],
+              note: notes[index].note,
               onPress: onPress,
             ),
           ),
@@ -44,6 +45,7 @@ class SliverNoteGrid extends StatelessWidget {
 class NoteTile extends StatelessWidget {
   final Note note;
   final OnPress onPress;
+
   const NoteTile({super.key, required this.note, required this.onPress});
 
   @override

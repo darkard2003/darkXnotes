@@ -1,8 +1,10 @@
 import 'package:awesome_notes/bloc/auth_bloc/auth_event.dart';
 import 'package:awesome_notes/bloc/auth_bloc/auth_state.dart';
+import 'package:awesome_notes/firebase_options.dart';
 import 'package:awesome_notes/services/auth/auth_exp.dart';
-import 'package:awesome_notes/services/auth/firebase_auth_provider.dart';
+import 'package:awesome_notes/services/auth/auth_provider.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_event.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_state.dart';
@@ -10,19 +12,27 @@ export 'package:awesome_notes/services/auth/auth_exp.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(FirebaseAuthProvider provider)
-      : super(const AuthStateUninitialized()) {
+  AuthBloc(AppAuthProvider provider) : super(const AuthStateUninitialized()) {
     on<AuthEventInitialize>(
       (event, emit) async {
-        await provider.initialise();
-        final user = await provider.user;
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        var user = await provider.user;
         if (user == null) {
           emit(const AuthStateNeedLogin(isLoading: false));
-        } else if (!user.isVerified) {
-          emit(AuthStateNeedVerification(isLoading: false, user: user));
-        } else {
-          emit(AuthStateLoggedIn(isLoading: false, user: user));
+          return;
         }
+        user = await CloudDatabase().getUserData(user.id);
+        if (user == null) {
+          emit(const AuthStateNeedRegister(isLoading: false));
+          return;
+        }
+        if (!user.isVerified) {
+          emit(AuthStateNeedVerification(isLoading: false, user: user));
+          return;
+        }
+        emit(AuthStateLoggedIn(isLoading: false, user: user));
       },
     );
 
@@ -35,8 +45,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
           final email = event.email;
           final password = event.password;
-          final user =
+          final userId =
               await provider.loginWithEmail(email: email, password: password);
+
+          var user = await CloudDatabase().getUserData(userId);
+
+          if (user == null) {
+            emit(const AuthStateNeedRegister(isLoading: false));
+            return;
+          }
 
           if (user.isVerified) {
             emit(AuthStateLoggedIn(isLoading: false, user: user));
@@ -62,14 +79,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         if (password == confirmPassword) {
           try {
-            final user = await provider.registerWithEmail(
-                email: email, password: password);
-            user.name = name;
-
-            user.sendEmailVerification();
-
-            await CloudDatabase.currentUser().addUserData(user);
-
+            var user = await provider.registerWithEmail(
+              email: email,
+              password: password,
+              name: name,
+            );
+            await provider.sendEmailVerification(user);
+            await CloudDatabase().addUserData(user);
             emit(AuthStateNeedVerification(isLoading: false, user: user));
           } on Exception catch (exp) {
             emit(
@@ -113,9 +129,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             user: user,
           ),
         );
-        await user.reload();
-        if (user.isVerified) {
-          await CloudDatabase.currentUser().updateUserData(user);
+        var refreshedUser = await provider.refreshUser(user);
+        if (refreshedUser == null) {
+          emit(const AuthStateNeedLogin(isLoading: false));
+          return;
+        }
+        if (refreshedUser.isVerified) {
+          await CloudDatabase().updateUserData(user);
           emit(AuthStateLoggedIn(isLoading: false, user: user));
         } else {
           emit(AuthStateNeedVerification(isLoading: false, user: user));
@@ -124,9 +144,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     on<AuthEventSendVerificationEmail>(
-      (event, emit) {
+      (event, emit) async {
         final user = event.user;
-        user.sendEmailVerification();
+        await provider.sendEmailVerification(user);
       },
     );
   }
