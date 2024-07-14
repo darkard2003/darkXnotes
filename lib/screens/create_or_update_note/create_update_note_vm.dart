@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notes/bloc/auth_bloc/auth_bloc.dart';
 import 'package:awesome_notes/models/note_model.dart';
 import 'package:awesome_notes/screens/create_or_update_note/note_state.dart';
@@ -39,6 +41,15 @@ class CreateUpdateNoteVM extends Cubit<EditNoteState> {
       ),
     );
 
+    init();
+  }
+
+  Future<void> init() async {
+    if (!isUpdate) {
+      await createNote();
+    }
+    emit(state.copyWith(loading: false));
+
     titleController.addListener(() async {
       if (state.loading) return;
       var text = titleController.text;
@@ -57,15 +68,6 @@ class CreateUpdateNoteVM extends Cubit<EditNoteState> {
       }
       updateNote();
     });
-
-    init();
-  }
-
-  void init() async {
-    if (!isUpdate) {
-      await createNote();
-    }
-    emit(state.copyWith(loading: false));
   }
 
   Future<void> createNote() async {
@@ -92,13 +94,13 @@ class CreateUpdateNoteVM extends Cubit<EditNoteState> {
     } else {
       return;
     }
-    updateNote();
+    updateCurrentNote();
   }
 
   void toggleHidden() async {
     var note = state.note.copyWith(isHidden: !state.note.isHidden);
     emit(state.copyWith(note: note));
-    updateNote();
+    updateCurrentNote();
   }
 
   void deleteNote() async {
@@ -142,5 +144,19 @@ class CreateUpdateNoteVM extends Cubit<EditNoteState> {
         ),
       );
     }
+  }
+
+  void _deleteIfEmpty() async {
+    if (state.note.title.isEmpty && state.note.noteContent.isEmpty) {
+      await cloud.deleteNote(state.note, uid);
+    }
+  }
+
+  @override
+  Future<void> close() {
+    titleController.dispose();
+    contentController.dispose();
+    _deleteIfEmpty();
+    return super.close();
   }
 }

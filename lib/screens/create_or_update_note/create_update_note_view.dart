@@ -37,6 +37,7 @@ class CreateUpdateNoteView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (state.loading) const LinearProgressIndicator(),
             TextField(
               style: const TextStyle(fontSize: 20),
               keyboardType: TextInputType.multiline,
