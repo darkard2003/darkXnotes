@@ -87,7 +87,7 @@ class FirebaseAuthProvider implements AppAuthProvider {
     if (fireuser == null) {
       return null;
     }
-
+    await fireuser.reload();
     return user.copyWith(
       id: fireuser.uid,
       email: fireuser.email!,
