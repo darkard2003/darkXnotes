@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
           colorScheme: lightDynamic,
           scaffoldBackgroundColor: lightDynamic?.surface ?? Colors.white,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: lightDynamic?.primary ?? Colors.blue,
+            backgroundColor: lightDynamic?.primary ?? Colors.lightBlueAccent,
+            foregroundColor: lightDynamic?.onPrimary ?? Colors.white,
           ),
           dialogBackgroundColor: lightDynamic?.surface ?? Colors.white,
         ),
