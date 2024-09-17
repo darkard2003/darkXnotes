@@ -62,7 +62,9 @@ class NoteTile extends StatelessWidget {
                   child: Text(
                     tNote.title,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 17),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -73,8 +75,6 @@ class NoteTile extends StatelessWidget {
                 : const EdgeInsets.fromLTRB(15, 42, 15, 15),
             child: Text(
               tNote.content,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 7,
             ),
           ),
         ),
