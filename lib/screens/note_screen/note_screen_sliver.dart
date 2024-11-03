@@ -62,7 +62,6 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
     }
   }
 
-
 // Create note
   void _createNote({Type type = Type.text}) async {
     final note = Note.newNote(type: type, isHidden: _hidden);
@@ -139,34 +138,35 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
               ),
               actions: [
                 Avatar(
-                            shape: AvatarShape.circle(18),
-                            border: Border.all(
-                              color: const Color.fromRGBO(245, 245, 245, 1),
-                              width: 2,
-                            ),
-                            margin: const EdgeInsets.all(10),
-                            name: widget.user.name,
-                            onTap: () async {
-                              try {
-                                final action =
-                                    await showSettingDialog(context, widget.user);
-                                if (!mounted) return;
-                                _doSettingAction(action);
-                              } on Exception catch (e) {
-                                showAlartDialog(
-                                    title: 'Error',
-                                    content: e.toString(),
-                                    context: context);
-                              }
-                            },
-                            placeholderColors: [
-                              Theme.of(context).colorScheme.primary,
-                            ],
-                            textStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                  shape: AvatarShape.circle(18),
+                  border: Border.all(
+                    color: const Color.fromRGBO(245, 245, 245, 1),
+                    width: 2,
+                  ),
+                  margin: const EdgeInsets.all(10),
+                  name: widget.user.name,
+                  onTap: () async {
+                    try {
+                      final action =
+                          await showSettingDialog(context, widget.user);
+                      if (!mounted) return;
+                      _doSettingAction(action);
+                    } on Exception catch (e) {
+                      if (!context.mounted) return;
+                      showAlartDialog(
+                          title: 'Error',
+                          content: e.toString(),
+                          context: context);
+                    }
+                  },
+                  placeholderColors: [
+                    Theme.of(context).colorScheme.primary,
+                  ],
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             SliverPadding(
@@ -222,6 +222,7 @@ class _NotesScreenSliverState extends State<NotesScreenSliver> {
               });
             }
           } else {
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Authentication not supported'),

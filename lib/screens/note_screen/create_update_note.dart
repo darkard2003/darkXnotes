@@ -31,11 +31,13 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   Future<void> _initNote() async {
     try {
       _note ??= ModalRoute.of(context)!.settings.arguments as TextNote;
+      if (!mounted) return;
       _hidden = _note!.isHidden;
       titleController.text = _note!.title;
       contentController.text = _note!.content;
       _note = await cloud.createOrUpdateNote(_note!) as TextNote;
     } catch (e) {
+      if (!mounted) return;
       showAlartDialog(title: 'Error', content: e.toString(), context: context);
     }
   }
@@ -48,6 +50,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         cloud.deleteNote(_note!);
       }
     } catch (e) {
+      if (!mounted) return;
       showAlartDialog(title: 'Error', content: e.toString(), context: context);
     }
   }
@@ -55,6 +58,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   void _share() async {
     try {
       if (_note == null) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('No note selected'),
@@ -62,6 +66,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         );
       }
       if (_note!.content.isEmpty) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Note is empty'),
@@ -74,6 +79,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
         subject: _note!.title,
       );
     } catch (e) {
+      if (!mounted) return;
       showAlartDialog(title: 'Error', content: e.toString(), context: context);
     }
   }
@@ -112,6 +118,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
               onPressed: () async {
                 _note!.isHidden = !_note!.isHidden;
                 await cloud.createOrUpdateNote(_note!);
+                if (!mounted) return;
                 setState(
                   () {
                     _hidden = _note!.isHidden;
@@ -144,6 +151,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                   _note!.title = text;
                   _note = await cloud.createOrUpdateNote(_note!) as TextNote;
                 } catch (e) {
+                  if (!context.mounted) return;
                   showAlartDialog(
                       title: 'Error', content: e.toString(), context: context);
                 }
@@ -165,6 +173,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                     _note!.content = text;
                     _note = await cloud.createOrUpdateNote(_note!) as TextNote;
                   } catch (e) {
+                    if (!context.mounted) return;
                     showAlartDialog(
                         title: 'Error',
                         content: e.toString(),
