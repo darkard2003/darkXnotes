@@ -9,22 +9,14 @@ class TextNote extends Note {
   final cypher = Cypher();
 
   TextNote({
-    required String id,
-    required Type type,
-    required String title,
+    required super.id,
+    required super.type,
+    required super.title,
     required String content,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    required bool isHidden,
-  })  : _content = content.isNotEmpty ? Cypher().encrypt(content) : "",
-        super(
-          id: id,
-          type: type,
-          title: title,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          isHidden: isHidden,
-        );
+    required super.createdAt,
+    required super.updatedAt,
+    required super.isHidden,
+  })  : _content = content.isNotEmpty ? Cypher().encrypt(content) : "";
 
   set content(String source) {
     _content = source.isNotEmpty ? cypher.encrypt(source) : "";

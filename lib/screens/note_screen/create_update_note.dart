@@ -3,12 +3,13 @@ import 'package:awesome_notes/models/note_model.dart';
 import 'package:awesome_notes/models/user_data_model.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNote extends StatefulWidget {
-  const CreateUpdateNote({Key? key}) : super(key: key);
+  const CreateUpdateNote({super.key});
 
   @override
   State<CreateUpdateNote> createState() => _CreateUpdateNoteState();
@@ -17,7 +18,7 @@ class CreateUpdateNote extends StatefulWidget {
 class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   TextNote? _note;
   late final TextEditingController titleController;
-  late final TextEditingController contentController;
+  late final DetectableTextEditingController contentController;
   late final CloudDatabase cloud;
   late final UserData user;
   late bool _hidden;
@@ -25,7 +26,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   void _init() {
     cloud = CloudDatabase.currentUser();
     titleController = TextEditingController();
-    contentController = TextEditingController();
+    contentController = DetectableTextEditingController();
   }
 
   Future<void> _initNote() async {
@@ -180,8 +181,8 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                         context: context);
                   }
                 },
-                detectionRegExp: urlRegex,
-                decoratedStyle: TextStyle(
+                regExp: urlRegex,
+                detectedStyle: TextStyle(
                   color: Colors.blue[600],
                   // make it bold and italic
                   fontWeight: FontWeight.bold,

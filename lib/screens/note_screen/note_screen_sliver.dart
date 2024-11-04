@@ -13,7 +13,7 @@ import 'package:avatars/avatars.dart';
 
 class NotesScreenSliver extends StatefulWidget {
   final UserData user;
-  const NotesScreenSliver({Key? key, required this.user}) : super(key: key);
+  const NotesScreenSliver({super.key, required this.user});
 
   @override
   State<NotesScreenSliver> createState() => _NotesScreenSliverState();

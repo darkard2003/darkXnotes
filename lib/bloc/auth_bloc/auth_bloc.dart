@@ -5,12 +5,18 @@ import 'package:awesome_notes/services/auth/firebase_auth_provider.dart';
 import 'package:awesome_notes/services/cloud_database/cloud_database.dart';
 import 'package:awesome_notes/services/encryption/cypher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_event.dart';
 export 'package:awesome_notes/bloc/auth_bloc/auth_state.dart';
 export 'package:awesome_notes/services/auth/auth_exp.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final secureStorage = FlutterSecureStorage(
+    aOptions: const AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
   AuthBloc(FirebaseAuthProvider provider)
       : super(const AuthStateUninitialized()) {
     on<AuthEventInitialize>(
@@ -19,10 +25,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = await provider.user;
         if (user == null) {
           emit(const AuthStateNeedLogin(isLoading: false));
-        } else {
-          await Cypher().init();
-          emit(AuthStateLoggedIn(isLoading: false, user: user));
+          return;
         }
+        final key = await secureStorage.read(key: 'cypherKey');
+        final cypherUser = await secureStorage.read(key: 'cypherUser');
+        if (cypherUser == null || key == null) {
+          emit(const AuthStateNeedLogin(isLoading: false));
+          return;
+        }
+
+        if (cypherUser != user.id) {
+          emit(const AuthStateNeedLogin(isLoading: false));
+          return;
+        }
+
+        Cypher().init(key);
+
+        emit(AuthStateLoggedIn(isLoading: false, user: user));
       },
     );
 
@@ -39,8 +58,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               await provider.loginWithEmail(email: email, password: password);
 
           if (user.isVerified) {
-            Cypher.storePassword(password);
-            await Cypher().init();
+            secureStorage.write(key: 'cypherUser', value: user.id);
+            var passkey = Cypher.generatePassword(password);
+            secureStorage.write(key: 'cypherKey', value: passkey);
+            Cypher().init(passkey);
             emit(AuthStateLoggedIn(isLoading: false, user: user));
           } else {
             emit(AuthStateNeedVerification(isLoading: false, user: user));
@@ -67,11 +88,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             final user = await provider.registerWithEmail(
                 email: email, password: password);
             user.name = name;
-            Cypher.storePassword(password);
             user.sendEmailVerification();
-
+            secureStorage.write(key: 'cypherUser', value: user.id);
+            var passkey = Cypher.generatePassword(password);
+            secureStorage.write(key: 'cypherKey', value: passkey);
             await CloudDatabase.currentUser().addUserData(user);
-
             emit(AuthStateNeedVerification(isLoading: false, user: user));
           } on Exception catch (exp) {
             emit(
@@ -118,7 +139,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await user.reload();
         if (user.isVerified) {
           await CloudDatabase.currentUser().updateUserData(user);
-          await Cypher().init();
           emit(AuthStateLoggedIn(isLoading: false, user: user));
         } else {
           emit(AuthStateNeedVerification(isLoading: false, user: user));

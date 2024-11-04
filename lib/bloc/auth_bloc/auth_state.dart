@@ -14,15 +14,14 @@ class AuthStateLoggedIn extends AuthState {
   final String? error;
   final UserData user;
   const AuthStateLoggedIn(
-      {this.error, required bool isLoading, required this.user})
-      : super(isLoading: isLoading);
+      {this.error, required super.isLoading, required this.user});
 }
 
 class AuthStateNeedLogin extends AuthState with EquatableMixin {
   final String? error;
   const AuthStateNeedLogin(
-      {this.error, required bool isLoading, String? loadingText})
-      : super(isLoading: isLoading, loadingText: loadingText ?? '');
+      {this.error, required super.isLoading, String? loadingText})
+      : super(loadingText: loadingText ?? '');
 
   @override
   List<Object?> get props => [error, isLoading];
@@ -31,8 +30,8 @@ class AuthStateNeedLogin extends AuthState with EquatableMixin {
 class AuthStateNeedRegister extends AuthState with EquatableMixin {
   final String? error;
   const AuthStateNeedRegister(
-      {this.error, required bool isLoading, String? loadingText})
-      : super(isLoading: isLoading, loadingText: loadingText ?? '');
+      {this.error, required super.isLoading, String? loadingText})
+      : super(loadingText: loadingText ?? '');
 
   @override
   List<Object?> get props => [error, isLoading];
@@ -43,10 +42,10 @@ class AuthStateNeedVerification extends AuthState with EquatableMixin {
   final UserData user;
   const AuthStateNeedVerification({
     this.error,
-    required bool isLoading,
+    required super.isLoading,
     required this.user,
     String? loadingText,
-  }) : super(isLoading: isLoading, loadingText: loadingText ?? '');
+  }) : super(loadingText: loadingText ?? '');
 
   @override
   List<Object?> get props => [error, isLoading];
